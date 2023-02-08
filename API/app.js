@@ -49,7 +49,7 @@ async function getUser(req) {
             const sql = 'SELECT `userId`, `email`, `username` FROM `users` WHERE `username`=? AND `password`=?';
             const result = await db.query(sql, [username, password]);
 
-            if(result){
+            if(result && result.length > 0){
                 status = 200;
                 data = {
                     'result': result
