@@ -52,7 +52,9 @@ async function getUser(req) {
             if(result && result.length > 0){
                 status = 200;
                 data = {
-                    'result': result
+                    'userId': result[0].userId,
+                    'email': result[0].email,
+                    'username': result[0].username
                 };
             } else {
                 status = 204;
