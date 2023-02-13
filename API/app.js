@@ -58,6 +58,7 @@ async function getUser(req) {
                 };
             } else {
                 status = 204;
+                data = {error: "Incorrect username or password"};
             }
             
         } else {
@@ -82,17 +83,36 @@ async function postUser(req) {
         && username.length > 0 && username.length <= 64
         && password.length > 0 && password.length <= 64){
 
-            const sql = 'INSERT INTO `users` (`email`, `username`, `password`) '
-            + 'VALUES (?, ?, ?)';
-            const result = await db.query(sql, [email, username, password]);
-
-            if(result.affectedRows) {
-                status = 201;
-                data = {'id': result.insertId };
+            let sql = 'SELECT `userId` FROM `users` WHERE `email`=?';
+            let result = await db.query(sql, [email]);
+            if(result.length < 1){
+                
+                let sql = 'SELECT `userId` FROM `users` WHERE `username`=?';
+                let result = await db.query(sql, [username]);
+                if(result.length < 1){
+                
+                    let sql = 'INSERT INTO `users` (`email`, `username`, `password`) '
+                    + 'VALUES (?, ?, ?)';
+                    let result = await db.query(sql, [email, username, password]);
+        
+                    if(result.affectedRows) {
+                        status = 201;
+                        data = {'id': result.insertId };
+                    }
+                
+                } else { 
+                    status = 400;
+                    data = { error: "That username is already in use" };
+                }
+                
+            } else { 
+               status = 400;
+               data = { error: "That email is already in use" };
             }
             
         } else {
             status = 400;
+            data = { error: "Information provided was Invalid" };
         }
     } catch(e) {
         console.error(e);
