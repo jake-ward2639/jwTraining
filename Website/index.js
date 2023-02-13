@@ -31,8 +31,11 @@ addEventListener('load', (event) => {
         return "";
     }
 
-    if (getCookie('username') != "" && getCookie('username') != null){
+    if (getCookie('username') == "" || getCookie('username') == null){
+        window.location.replace("https://jw1448.brighton.domains/jwTraining/login");
+    } else {
         document.querySelector('#profile-card-username').textContent = getCookie('username');
     }
+
 
 })

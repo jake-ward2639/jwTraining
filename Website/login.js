@@ -14,6 +14,7 @@ addEventListener('load', (event) => {
             if (response.status == 200){
                 setCookie('username', username, 1);
                 setCookie('password', password, 1);
+                window.location.replace("https://jw1448.brighton.domains/jwTraining");
             } else if (response.status == 204){
                 document.querySelector('#login-alert-content').textContent = 'Incorrect Username or Password';
                 document.querySelector('#login-alert').style.display = "block";
@@ -45,6 +46,7 @@ addEventListener('load', (event) => {
             if (response.status == 200){
                 setCookie('username', document.querySelector('#signup-username').value, 1);
                 setCookie('password', document.querySelector('#signup-password').value, 1);
+                window.location.replace("https://jw1448.brighton.domains/jwTraining");
             } else if (response.status == 400){
                 response.json().then(res => {
                     document.querySelector('#signup-alert-content').textContent = res.error;
