@@ -51,6 +51,26 @@ button:hover {
   display: table;
 }
 
+.alert {
+  padding: 20px;
+  margin: 10px;
+  background-color: #f44336;
+  color: white;
+}
+
+.closebtn {
+  margin-left: 10px;
+  color: white;
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
 @media screen and (max-width: 300px) {
   .cancelbtn, .signupbtn {
      width: 100%;
@@ -132,5 +152,5 @@ form {
 
   .column.small {
    display: none;
-}
+  }
 }

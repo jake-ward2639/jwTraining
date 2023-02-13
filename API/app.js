@@ -58,7 +58,6 @@ async function getUser(req) {
                 };
             } else {
                 status = 204;
-                data = {error: "Incorrect username or password"};
             }
             
         } else {
