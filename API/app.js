@@ -15,8 +15,26 @@ app.set('view engine', 'ejs');
 const port = 3000;
 
 app.get('/jwTrainingAPI/article', async (req, res) => {
-    const data = { message: 'Hello, world!' };
-    res.render('test.ejs', data);
+    const articleId = req.query.articleId;
+    if(articleId && articleId.length > 0){
+        const sql = 'SELECT  `title`, `video_link`, `main_content`, `quiz_content` FROM `articles` WHERE `articleId`=?';
+        const result = await db.query(sql, [articleId]);
+
+        if(result && result.length > 0){
+            const data = { 
+                title: result[0].title,
+                video_link: result[0].video_link,
+                main_content: result[0].main_content,
+                quiz_content: result[0].quiz_content
+            };
+            res.render('test.ejs', data);
+        } else {
+            res.status(204);
+        }
+    } else {
+    res.status(400);
+    }
+    res.end();
 })
 
 app.get('/jwTrainingAPI/login', async (req, res) => {
