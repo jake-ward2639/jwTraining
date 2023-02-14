@@ -2,8 +2,49 @@
 <html>
   <head>
     <title>Dynamic Page</title>
+    <link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" href="https://jw1448.brighton.domains/jwTraining/assets/jwTraining.ico">
+    <script src="https://jw1448.brighton.domains/jwTraining/index.js"></script>
   </head>
   <body>
-    <h1><%= message %></h1>
-  </body>
+    <div class="header">
+    <div class="row">
+        <div class="column medium"></div>
+        <div class="column medium"><h2>jwTraining</h2></div>
+        <div class="column medium">
+            <div class="card profile">
+                <p><i class="fa fa-user-o" aria-hidden="true"></i> <span id="profile-card-username">Username</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="topnav" id="topNav">
+  <a href="#dashboard">DashBoard</a>
+  <a href="#account">Account</a>
+  <a href="#training">Training</a>
+  <a href="#contact">Contacts</a>
+  <a href="javascript:void(0);" class="icon" onclick="mobFriNav()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+
+<div class="row">
+  <div class="column small" style="background-color:#ccc;"></div>
+  <div class="column medium" style="background-color:#bbb;">
+    <div class="card">
+        <div class="container">
+            <h4><%= message %></h4> 
+            <p><%= message %></p> 
+        </div>
+    </div>
+  </div>
+  <div class="column small" style="background-color:#ccc;"></div>
+</div>
+
+<div class="footer">
+  <p>Footer</p>
+</div>
+
+</body>
 </html>
