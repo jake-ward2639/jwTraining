@@ -10,7 +10,14 @@ const db = require('./db');
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.set('view engine', 'ejs');
+
 const port = 3000;
+
+app.get('/jwTrainingAPI/article', async (req, res) => {
+    const data = { message: 'Hello, world!' };
+    res.render('test.ejs', data);
+})
 
 app.get('/jwTrainingAPI/login', async (req, res) => {
     const {status, data} = await getUser(req);
