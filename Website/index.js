@@ -31,11 +31,12 @@ addEventListener('load', (event) => {
         return "";
     }
 
-    if (getCookie('username') == "" || getCookie('username') == null){
-        window.location.replace("https://jw1448.brighton.domains/jwTraining/login");
+    if (sessionStorage.getItem("JWusername") != "" && sessionStorage.getItem("JWusername") != null){
+        document.querySelector('#profile-card-username').textContent = sessionStorage.getItem("JWusername");
+    } else if (getCookie('JWusername') != "" && getCookie('JWusername') != null){
+        document.querySelector('#profile-card-username').textContent = getCookie('JWusername');
     } else {
-        document.querySelector('#profile-card-username').textContent = getCookie('username');
+        window.location.replace("https://jw1448.brighton.domains/jwTraining/login.html");
     }
-
 
 })

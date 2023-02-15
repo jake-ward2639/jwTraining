@@ -12,8 +12,13 @@ addEventListener('load', (event) => {
         fetch("https://jw1448.brighton.domains/jwTrainingAPI/login?username="+username+"&password="+password, requestOptions)
         .then(response => {
             if (response.status == 200){
-                setCookie('username', username, 1);
-                setCookie('password', password, 1);
+                if(document.querySelector('#login-rm-checkbox').checked == true){
+                    setCookie('JWusername', username, 1);
+                    setCookie('JWpassword', password, 1);
+                } else {
+                    sessionStorage.setItem("JWusername", username);
+                    sessionStorage.setItem("JWpassword", password);
+                }
                 window.location.replace("https://jw1448.brighton.domains/jwTraining");
             } else if (response.status == 204){
                 document.querySelector('#login-alert-content').textContent = 'Incorrect Username or Password';
@@ -47,8 +52,13 @@ addEventListener('load', (event) => {
             fetch("https://jw1448.brighton.domains/jwTrainingAPI/signup", requestOptions)
             .then(response => {
                 if (response.status == 200){
-                    setCookie('username', document.querySelector('#signup-username').value, 1);
-                    setCookie('password', document.querySelector('#signup-password').value, 1);
+                    if(document.querySelector('#signup-rm-checkbox').checked == true){
+                        setCookie('JWusername', document.querySelector('#signup-username').value, 1);
+                        setCookie('JWpassword', document.querySelector('#signup-password').value, 1);
+                    } else {
+                        sessionStorage.setItem("JWusername", document.querySelector('#signup-username').value);
+                        sessionStorage.setItem("JWpassword", document.querySelector('#signup-password').value);
+                    }
                     window.location.replace("https://jw1448.brighton.domains/jwTraining");
                 } else if (response.status == 400){
                     response.json().then(res => {
