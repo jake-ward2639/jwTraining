@@ -27,7 +27,7 @@ app.get('/jwTrainingAPI/article', async (req, res) => {
                 main_content: result[0].main_content,
                 quiz_content: result[0].quiz_content
             };
-            res.render('test.ejs', data);
+            res.render('article.ejs', data);
         } else {
             res.status(204);
         }
