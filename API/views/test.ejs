@@ -2,10 +2,12 @@
 <html>
   <head>
     <title>Dynamic Page</title>
-    <link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/index.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="icon" href="https://jw1448.brighton.domains/jwTraining/assets/jwTraining.ico">
-    <script src="https://jw1448.brighton.domains/jwTraining/index.js"></script>
+    <script src="https://jw1448.brighton.domains/jwTraining/javascript/index.js"></script>
+    <script src="https://www.youtube.com/player_api"></script>
   </head>
   <body>
     <div class="header">
@@ -35,6 +37,9 @@
     <div class="card">
         <div class="container">
             <h4><%= title %></h4> 
+            <div class="player-container">
+                <div id="player"></div>
+            </div>
             <p><%- main_content.replace(/\n/g, "<br>") %></p> 
         </div>
     </div>
@@ -45,6 +50,51 @@
 <div class="footer">
   <p>Footer</p>
 </div>
+
+<script>
+// create youtube player with api
+let player;
+function onYouTubePlayerAPIReady() {
+    player = new YT.Player('player', {
+        width: '100%',
+        videoId: 'jNQXAC9IVRw',
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+// video will autoplay when ready
+function onPlayerReady(event) {
+    event.target.playVideo();
+}
+
+// video will do something when it ends
+function onPlayerStateChange(event) {        
+    if(event.data === 0) {            
+        alert('alert');
+    }
+}
+</script>
+<style>
+    .player-container {
+        float: none;
+        clear: both;
+        width: 100%;
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 25px;
+        height: 0;
+    }
+    .player-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
 
 </body>
 </html>
