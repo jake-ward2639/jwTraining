@@ -68,6 +68,13 @@ app.post('/jwTrainingAPI/assign_role', async (req, res) => {
     else res.end();
 })
 
+app.post('/jwTrainingAPI/assign_training', async (req, res) => {
+    const {status, data} = await postAssignment(req);
+    res.status(status);
+    if(data) res.json(data);
+    else res.end();
+})
+
 async function getUser(req) {
     let status = 500, data = null;
     try {
@@ -176,6 +183,58 @@ async function postRole(req) {
                     
                     let sql = 'UPDATE `users` SET `job_title` =? WHERE `username` =?';
                     let result = await db.query(sql, [newrole, targetuser]);
+                    if(result.affectedRows) {
+                        status = 200;
+                        data = {'affectedRows': result.affectedRows };
+                    } else {
+                        status = 204;   
+                    }
+                    
+                } else {
+                    status = 401;   
+                }
+    
+            } else {
+                status = 400;   
+            }
+            
+        } else {
+            status = 400;   
+        }
+    } catch(e) {
+        console.error(e);
+    }
+    return {status, data};
+}
+
+async function postAssignment(req) {
+    let status = 500, data = null;
+    try {
+        const username = req.body.username;
+        const password = req.body.password;
+        const articleId = req.body.articleId;
+        const job_title = req.body.job_title;
+        const deadline = req.body.deadline;
+        if(username && password && articleId && job_title && deadline
+        && username.length > 0 && username.length <= 32
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
+        && password.length > 0 && password.length <= 32
+        && articleId.length > 0 && articleId.length <= 32
+        && articleId.match(/^[0-9]+$/)
+        && job_title.length > 0 && job_title.length <= 32
+        && job_title.match(/^[a-zA-Z0-9_-]+$/)
+        && deadline.length > 0 && deadline.length <= 12
+        && deadline.match(/^[0-9]+$/)){
+
+            let sql = 'SELECT `job_title` FROM `users` WHERE `username`=? AND `password`=?';
+            let result = await db.query(sql, [username, password]);
+
+            if(result && result.length > 0){
+                
+                if (result[0].job_title == 'admin'){
+                    
+                    let sql = 'INSERT INTO assigned_articles (userId, articleId, due_date, completed) SELECT u.userId, a.articleId, DATE_ADD(NOW(), INTERVAL ? DAY), FALSE FROM users u INNER JOIN articles a ON u.job_title = ? AND a.articleId = ? LEFT JOIN assigned_articles aa ON u.userId = aa.userId AND a.articleId = aa.articleId WHERE aa.userId IS NULL';
+                    let result = await db.query(sql, [deadline, job_title, articleId]);
                     if(result.affectedRows) {
                         status = 200;
                         data = {'affectedRows': result.affectedRows };
