@@ -51,7 +51,7 @@ addEventListener('load', (event) => {
 
             fetch("https://jw1448.brighton.domains/jwTrainingAPI/signup", requestOptions)
             .then(response => {
-                if (response.status == 200){
+                if (response.status == 201){
                     if(document.querySelector('#signup-rm-checkbox').checked == true){
                         setCookie('JWusername', document.querySelector('#signup-username').value, 1);
                         setCookie('JWpassword', document.querySelector('#signup-password').value, 1);
