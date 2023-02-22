@@ -61,6 +61,13 @@ app.delete('/jwTrainingAPI', async (req, res) => {
     res.end();
 })
 
+app.post('/jwTrainingAPI/assign_role', async (req, res) => {
+    const {status, data} = await postRole(req);
+    res.status(status);
+    if(data) res.json(data);
+    else res.end();
+})
+
 async function getUser(req) {
     let status = 500, data = null;
     try {
@@ -68,7 +75,7 @@ async function getUser(req) {
         const password = req.query.password;
         if(username && password
         && username.length > 0 && username.length <= 32
-        && username.match(/^[a-z0-9]+$/i)
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
         && password.length > 0 && password.length <= 32){
 
             const sql = 'SELECT `userId`, `email`, `username` FROM `users` WHERE `username`=? AND `password`=?';
@@ -103,7 +110,7 @@ async function postUser(req) {
         if(email && username && password
         && email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
         && email.length > 0 && email.length <= 64 
-        && username.match(/^[a-z0-9]+$/i)
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
         && username.length > 0 && username.length <= 64
         && password.length > 0 && password.length <= 64){
 
@@ -144,6 +151,54 @@ async function postUser(req) {
     return {status, data};
 }
    
+async function postRole(req) {
+    let status = 500, data = null;
+    try {
+        const username = req.body.username;
+        const password = req.body.password;
+        const targetuser = req.body.targetuser;
+        const newrole = req.body.newrole;
+        if(username && password && targetuser && newrole
+        && username.length > 0 && username.length <= 32
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
+        && password.length > 0 && password.length <= 32
+        && targetuser.length > 0 && targetuser.length <= 32
+        && targetuser.match(/^[a-zA-Z0-9_.-]+$/)
+        && newrole.length > 0 && newrole.length <= 32
+        && newrole.match(/^[a-zA-Z0-9_-]+$/)){
+
+            let sql = 'SELECT `job_title` FROM `users` WHERE `username`=? AND `password`=?';
+            let result = await db.query(sql, [username, password]);
+
+            if(result && result.length > 0){
+                
+                if (result[0].job_title == 'admin'){
+                    
+                    let sql = 'UPDATE `users` SET `job_title` =? WHERE `username` =?';
+                    let result = await db.query(sql, [newrole, targetuser]);
+                    if(result.affectedRows) {
+                        status = 200;
+                        data = {'affectedRows': result.affectedRows };
+                    } else {
+                        status = 204;   
+                    }
+                    
+                } else {
+                    status = 401;   
+                }
+    
+            } else {
+                status = 400;   
+            }
+            
+        } else {
+            status = 400;   
+        }
+    } catch(e) {
+        console.error(e);
+    }
+    return {status, data};
+}
 
 app.listen(port, () => {
  console.log(`running at http://localhost:${port}`)
