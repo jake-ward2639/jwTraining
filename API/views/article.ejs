@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="article-stylesheet" href="https://jw1448.brighton.domains/jwTraining/css/article.css">
+    <link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/css/article.css">
     <link rel="icon" href="https://jw1448.brighton.domains/jwTraining/assets/jwTraining.ico">
   </head>
   <body>
@@ -36,8 +36,8 @@
     <div class="card">
         <div class="container">
             <h4><%= title %></h4> 
-            <div class="player-container">
-                <div id="videoId" style="display: none;">jNQXAC9IVRw</div>
+            <div id="player-container">
+                <div id="videoId" style="display: none;"><%= video_link %></div>
                 <div id="player"></div>
             </div>
             <p><%- main_content.replace(/\n/g, "<br>") %></p> 

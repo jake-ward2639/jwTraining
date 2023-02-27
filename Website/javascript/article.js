@@ -2,14 +2,17 @@ let player;
 
 function onYouTubeIframeAPIReady() {
     let vidId = document.querySelector("#videoId").textContent;
-    player = new YT.Player('player', {
-        width: '100%',
-        videoId: vidId,
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-        }
-    });
+    if (vidId.length != 0){
+        document.querySelector("#player-container").classList.add("player-container");
+        player = new YT.Player('player', {
+            width: '100%',
+            videoId: vidId,
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
 }
 
 function onPlayerReady(event) {
