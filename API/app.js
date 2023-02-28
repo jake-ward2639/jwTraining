@@ -184,10 +184,16 @@ async function getTraining(req) {
                 let result = await db.query(sql, [userId]);
     
                 if(result && result.length > 0){
+                    
+                    let sql = "SELECT CONCAT((SUM(completed) / COUNT(articleId)) * 100, '%') AS completed_percentage FROM assigned_articles WHERE userId =? AND due_date >= CURDATE()";
+                    let completed_percentage = await db.query(sql, [userId]);
+                    
                     status = 200;
                     data = {
-                        result
+                        result,
+                        'completed_percentage': completed_percentage[0].completed_percentage
                     };
+                    
                 } else {
                     status = 204;
                 }
