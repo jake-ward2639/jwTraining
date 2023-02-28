@@ -61,6 +61,13 @@ app.delete('/jwTrainingAPI', async (req, res) => {
     res.end();
 })
 
+app.get('/jwTrainingAPI/training', async (req, res) => {
+    const {status, data} = await getTraining(req);
+    res.status(status);
+    if(data) res.json(data);
+    else res.end();       
+})
+
 app.post('/jwTrainingAPI/assign_role', async (req, res) => {
     const {status, data} = await postRole(req);
     res.status(status);
@@ -85,13 +92,12 @@ async function getUser(req) {
         && username.match(/^[a-zA-Z0-9_.-]+$/)
         && password.length > 0 && password.length <= 32){
 
-            const sql = 'SELECT `userId`, `email`, `username` FROM `users` WHERE `username`=? AND `password`=?';
+            const sql = 'SELECT `email`, `username` FROM `users` WHERE `username`=? AND `password`=?';
             const result = await db.query(sql, [username, password]);
 
             if(result && result.length > 0){
                 status = 200;
                 data = {
-                    'userId': result[0].userId,
                     'email': result[0].email,
                     'username': result[0].username
                 };
@@ -151,6 +157,47 @@ async function postUser(req) {
         } else {
             status = 400;
             data = { error: "Information provided was Invalid" };
+        }
+    } catch(e) {
+        console.error(e);
+    }
+    return {status, data};
+}
+
+async function getTraining(req) {
+    let status = 500, data = null;
+    try {
+        const username = req.query.username;
+        const password = req.query.password;
+        if(username && password
+        && username.length > 0 && username.length <= 32
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
+        && password.length > 0 && password.length <= 32){
+
+            let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
+            let result = await db.query(sql, [username, password]);
+            let userId = result[0].userId;
+
+            if(result && result.length > 0){
+                
+                let sql = 'SELECT a.articleId, ar.title, ar.description FROM assigned_articles a JOIN articles ar ON a.articleId = ar.articleId WHERE a.userId =?';
+                let result = await db.query(sql, [userId]);
+    
+                if(result && result.length > 0){
+                    status = 200;
+                    data = {
+                        result
+                    };
+                } else {
+                    status = 204;
+                }
+                
+            } else {
+                status = 400;
+            }
+            
+        } else {
+            status = 400;   
         }
     } catch(e) {
         console.error(e);
