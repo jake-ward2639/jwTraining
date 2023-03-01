@@ -180,7 +180,7 @@ async function getTraining(req) {
 
             if(result && result.length > 0){
                 
-                let sql = 'SELECT a.articleId, ar.title, ar.description FROM assigned_articles a JOIN articles ar ON a.articleId = ar.articleId WHERE a.userId =?';
+                let sql = 'SELECT a.articleId, ar.title, ar.description FROM assigned_articles a JOIN articles ar ON a.articleId = ar.articleId WHERE a.userId =? AND a.completed = false';
                 let result = await db.query(sql, [userId]);
     
                 if(result && result.length > 0){
