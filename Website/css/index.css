@@ -75,6 +75,7 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 5px;
+    margin-bottom: 15px;
 }
 
 .card:hover {
@@ -119,6 +120,14 @@ body {
 
     .column.small {
         display: none;
+    }
+
+    #training_column1 {
+        padding-bottom: 0;
+    }
+    
+    #training_column2 {
+        padding-top: 0;
     }
 
 }
