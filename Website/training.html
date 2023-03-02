@@ -11,15 +11,15 @@
 <body>
 
 <div class="header">
-    <div class="row">
-        <div class="column medium"></div>
-        <div class="column medium"><h2>jwTraining</h2></div>
-        <div class="column medium">
-            <div class="card profile">
-                <p><i class="fa fa-user-o" aria-hidden="true"></i> <span id="profile-card-username">Username</span></p>
-            </div>
-        </div>
-    </div>
+  <div class="row">
+      <div class="column medium"></div>
+      <div class="column medium"><h2>jwTraining</h2></div>
+      <div class="column medium">
+          <div class="card profile">
+              <p><i class="fa fa-user-o" aria-hidden="true"></i> <span id="profile-card-username">Username</span></p>
+          </div>
+      </div>
+  </div>
 </div>
 <div class="topnav" id="topNav">
   <a href="https://jw1448.brighton.domains/jwTraining/training.html"  class="active">Training</a>
@@ -33,9 +33,21 @@
 
 <div class="row">
   <div class="column small" style="background-color:#ccc;"></div>
-  <div id="training_column1" class="column medium" style="background-color:#bbb;">
-  </div>
-  <div id="training_column2" class="column medium" style="background-color:#bbb;">
+  <div class="column medium noPadding" style="background-color:#bbb;">
+      <div class="row">
+            <div id="progress-container">
+                <div id="progress-bar">
+                    <div class="bar"></div>
+                    <div class="percentage">0%</div>
+                </div>
+            </div>
+      </div>
+      <div class="row">
+        <div id="training_column1" class="column medium" style="background-color:#bbb;">
+        </div>
+        <div id="training_column2" class="column medium" style="background-color:#bbb;">
+        </div>
+      </div>
   </div>
   <div class="column small" style="background-color:#ccc;"></div>
 </div>

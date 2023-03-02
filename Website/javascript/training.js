@@ -30,6 +30,17 @@ addEventListener('load', (event) => {
 
     }
 
+    const progressBar = document.querySelector('#progress-bar .bar');
+    const percentageLabel = document.querySelector('#progress-bar .percentage');
+
+    function setProgress(percent) {
+        progressBar.style.width = `${percent}%`;
+        percentageLabel.textContent = `${percent}%`;
+    }
+
+    //test to set the progress to 50%
+    setProgress(50);
+
     function createCard(articleId, title, description) {
         let card = document.createElement('div');
         card.classList.add('card');
