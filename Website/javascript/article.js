@@ -37,7 +37,7 @@ addEventListener('load', (event) => {
         for (let pair of formData.entries()) {
             answers.push(pair[1]);
         }
-        const quizData = JSON.parse('<%- JSON.stringify(quiz_content) %>');
+        const quizData = window.quizContent;
         let correctCount = 0;
         quizData.forEach((question, index) => {
             if (question.correctAnswerIndex == answers[index]) {
