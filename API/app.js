@@ -22,10 +22,11 @@ app.get('/jwTrainingAPI/article', async (req, res) => {
 
         if(result && result.length > 0){
             const data = { 
+                articleId: articleId,
                 title: result[0].title,
                 video_link: result[0].video_link,
                 main_content: result[0].main_content,
-                quiz_content: result[0].quiz_content
+                quiz_content: JSON.parse(result[0].quiz_content)
             };
             res.render('article.ejs', data);
         } else {

@@ -41,6 +41,21 @@
                 <div id="player"></div>
             </div>
             <p><%- main_content.replace(/\n/g, "<br>") %></p> 
+            <div class="quiz">
+              <form id="quiz-form">
+                <% quiz_content.forEach(function(question, index){ %>
+                  <div class="question">
+                    <p><%= index+1 %>. <%= question.question %></p>
+                    <% question.answers.forEach(function(answer, answerIndex){ %>
+                      <input type="radio" id="q<%= index+1 %>-a<%= answerIndex+1 %>" name="q<%= index+1 %>" value="<%= answerIndex %>" required>
+                      <label for="q<%= index+1 %>-a<%= answerIndex+1 %>"><%= answer %></label>
+                    <% }) %>
+                  </div>
+                <% }) %>
+                <input type="submit" value="Submit">
+              </form>
+              <div id="quiz-result"></div>
+            </div>
         </div>
     </div>
   </div>
