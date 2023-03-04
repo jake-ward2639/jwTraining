@@ -1,13 +1,23 @@
 addEventListener('load', (event) => {
-    if ((sessionStorage.getItem('JWusername') && sessionStorage.getItem('JWpassword')) || 
-    (document.cookie.includes('JWusername') && document.cookie.includes('JWpassword'))) {
-        
+    let username, password;
+
+    if (sessionStorage.getItem('JWusername') && sessionStorage.getItem('JWpassword')) {
+        username = sessionStorage.getItem('JWusername');
+        password = sessionStorage.getItem('JWpassword');
+    }
+    else if (document.cookie.includes('JWusername') && document.cookie.includes('JWpassword')) {
+        username = getCookie('JWusername');
+        password = getCookie('JWpassword');
+    }
+
+    if (username && password) {
+
         let requestOptions = {
             method: 'GET',
             redirect: 'follow'
         };
           
-        fetch("https://jw1448.brighton.domains/jwTrainingAPI/training?username="+getCookie('JWusername')+"&password="+getCookie('JWpassword'), requestOptions)
+        fetch("https://jw1448.brighton.domains/jwTrainingAPI/training?username="+username+"&password="+password, requestOptions)
             .then(response => response.json())
             .then(result => {
                 let half = Math.ceil(result.result.length / 2);
