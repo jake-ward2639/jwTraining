@@ -29,6 +29,15 @@ addEventListener('load', (event) => {
 
     const quizForm = document.getElementById('quiz-form');
     const quizResult = document.getElementById('quiz-result');
+    let username, password;
+    if (sessionStorage.getItem('JWusername') && sessionStorage.getItem('JWpassword')) {
+        username = sessionStorage.getItem('JWusername');
+        password = sessionStorage.getItem('JWpassword');
+    }
+    else if (document.cookie.includes('JWusername') && document.cookie.includes('JWpassword')) {
+        username = getCookie('JWusername');
+        password = getCookie('JWpassword');
+    }
     
     quizForm.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -48,6 +57,27 @@ addEventListener('load', (event) => {
         let resultMessage = `You scored ${score}%`;
         if (score >= 70) {
             resultMessage += " - Passed";
+
+            var submitQuizHeaders = new Headers();
+            submitQuizHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("username", username);
+            urlencoded.append("password", password);
+            urlencoded.append("articleId", articleId);
+        
+            var requestOptions = {
+                method: 'POST',
+                headers: submitQuizHeaders,
+                body: urlencoded,
+                redirect: 'follow'
+            };
+        
+            fetch("https://jw1448.brighton.domains/jwTrainingAPI/article/submit", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+
         } else {
             resultMessage += " - Failed";
         }

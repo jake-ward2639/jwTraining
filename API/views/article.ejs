@@ -56,9 +56,6 @@
               </form>
               <div id="quiz-result"></div>
             </div>
-            <script>
-              window.quizContent = <%- JSON.stringify(quiz_content) %>;
-            </script>
         </div>
     </div>
   </div>
@@ -69,6 +66,10 @@
   <p>Footer</p>
 </div>
 
+<script>
+  window.quizContent = <%- JSON.stringify(quiz_content) %>;
+  window.articleId = <%= articleId %>;
+</script>
 <script src="https://jw1448.brighton.domains/jwTraining/javascript/index.js"></script>
 <script src="https://www.youtube.com/player_api"></script>
 <script src="https://jw1448.brighton.domains/jwTraining/javascript/article.js"></script>

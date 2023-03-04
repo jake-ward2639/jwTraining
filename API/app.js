@@ -38,6 +38,37 @@ app.get('/jwTrainingAPI/article', async (req, res) => {
     res.end();
 })
 
+app.post('/jwTrainingAPI/article/submit', async (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    const articleId = req.body.articleId;
+    if(username && password && articleId
+    && username.length > 0 && username.length <= 32
+    && username.match(/^[a-zA-Z0-9_.-]+$/)
+    && password.length > 0 && password.length <= 32
+    && articleId.length > 0 && articleId.length <= 32
+    && articleId.match(/^[0-9]+$/)){
+        
+        let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
+        let result = await db.query(sql, [username, password]);
+
+        if(result && result.length > 0){
+            
+            let userId = result[0].userId;
+            sql = 'UPDATE `assigned_articles` SET `completed`=? WHERE `userId`=? AND `articleId`=?';
+            await db.query(sql, [true, userId, articleId]);
+            res.status(200);
+            
+        } else {
+            res.status(401);
+        }
+        
+    } else {
+    res.status(400);
+    }
+    res.end();
+})
+
 app.get('/jwTrainingAPI/login', async (req, res) => {
     const {status, data} = await getUser(req);
     res.status(status);
@@ -200,7 +231,7 @@ async function getTraining(req) {
                 }
                 
             } else {
-                status = 400;
+                status = 401;
             }
             
         } else {
