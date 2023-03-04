@@ -55,10 +55,13 @@ app.post('/jwTrainingAPI/article/submit', async (req, res) => {
         if(result && result.length > 0){
             
             let userId = result[0].userId;
-            sql = 'UPDATE `assigned_articles` SET `completed`=? WHERE `userId`=? AND `articleId`=?';
-            await db.query(sql, [true, userId, articleId]);
-            res.status(200);
-            
+            let sql = 'UPDATE `assigned_articles` SET `completed`=? WHERE `userId`=? AND `articleId`=?';
+            let updateResult = await db.query(sql, [true, userId, articleId]);
+            if(updateResult.affectedRows) {
+                res.status(200);
+            } else {
+                res.status(400);
+            }
         } else {
             res.status(401);
         }
