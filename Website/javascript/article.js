@@ -65,6 +65,7 @@ addEventListener('load', (event) => {
             urlencoded.append("username", username);
             urlencoded.append("password", password);
             urlencoded.append("articleId", articleId);
+            urlencoded.append("answers", answers);
         
             var requestOptions = {
                 method: 'POST',

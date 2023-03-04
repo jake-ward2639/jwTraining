@@ -39,37 +39,10 @@ app.get('/jwTrainingAPI/article', async (req, res) => {
 })
 
 app.post('/jwTrainingAPI/article/submit', async (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-    const articleId = req.body.articleId;
-    if(username && password && articleId
-    && username.length > 0 && username.length <= 32
-    && username.match(/^[a-zA-Z0-9_.-]+$/)
-    && password.length > 0 && password.length <= 32
-    && articleId.length > 0 && articleId.length <= 32
-    && articleId.match(/^[0-9]+$/)){
-        
-        let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
-        let result = await db.query(sql, [username, password]);
-
-        if(result && result.length > 0){
-            
-            let userId = result[0].userId;
-            let sql = 'UPDATE `assigned_articles` SET `completed`=? WHERE `userId`=? AND `articleId`=?';
-            let updateResult = await db.query(sql, [true, userId, articleId]);
-            if(updateResult.affectedRows) {
-                res.status(200);
-            } else {
-                res.status(400);
-            }
-        } else {
-            res.status(401);
-        }
-        
-    } else {
-    res.status(400);
-    }
-    res.end();
+    const {status, data} = await postQuiz(req);
+    res.status(status);
+    if(data) res.json(data);
+    else res.end();
 })
 
 app.get('/jwTrainingAPI/login', async (req, res) => {
@@ -341,6 +314,70 @@ async function postAssignment(req) {
         } else {
             status = 400;   
         }
+    } catch(e) {
+        console.error(e);
+    }
+    return {status, data};
+}
+
+async function postQuiz(req) {
+    let status = 500, data = null;
+    try {
+        const username = req.body.username;
+        const password = req.body.password;
+        const articleId = req.body.articleId;
+        const userAnswers = req.body.answers.split(",").map(Number);
+        if(username && password && articleId && userAnswers
+        && username.length > 0 && username.length <= 32
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
+        && password.length > 0 && password.length <= 32
+        && articleId.length > 0 && articleId.length <= 32
+        && articleId.match(/^[0-9]+$/)){
+            
+            let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
+            let result = await db.query(sql, [username, password]);
+    
+            if(result && result.length > 0){
+                
+                let sql2 = 'SELECT `quiz_content` FROM `articles` WHERE `articleId`=?';
+                let articleInfo = await db.query(sql2, [articleId]);
+                let quizContent = JSON.parse(articleInfo[0].quiz_content);
+        
+                let score = 0;
+                for (let i = 0; i < quizContent.length; i++) {
+                    if (userAnswers[i] == quizContent[i].correctAnswerIndex) {
+                        score++;
+                    }
+                }
+                let percentScore = score / quizContent.length;
+    
+                if (percentScore >= 0.7) {
+                
+                    let userId = result[0].userId;
+                    let sql3 = 'UPDATE `assigned_articles` SET `completed`=? WHERE `userId`=? AND `articleId`=?';
+                    let updateResult = await db.query(sql3, [true, userId, articleId]);
+                    if(updateResult.affectedRows) {
+                        status = 200;
+                        data = {
+                            'percentScore': percentScore
+                        };
+                    } else {
+                        status = 400;
+                    }
+                
+                
+                } else {
+                    status = 400;
+                }
+                
+            } else {
+                status = 401;
+            }
+            
+        } else {
+            status = 400;
+        }
+        
     } catch(e) {
         console.error(e);
     }
