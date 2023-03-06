@@ -99,6 +99,10 @@
       padding: 2px 16px;
   }
   
+  #nullJobTitleMessage {
+      display: none;
+  }
+  
   #progress-container {
       display: flex;
       align-items: center;

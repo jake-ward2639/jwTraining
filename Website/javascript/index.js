@@ -39,4 +39,32 @@ addEventListener('load', (event) => {
         window.location.replace("https://jw1448.brighton.domains/jwTraining/login.html");
     }
 
+    if (document.querySelector('#nullJobTitleMessage')) {
+        
+        let username, password;
+
+        if (sessionStorage.getItem('JWusername') && sessionStorage.getItem('JWpassword')) {
+            username = sessionStorage.getItem('JWusername');
+            password = sessionStorage.getItem('JWpassword');
+        }
+        else if (document.cookie.includes('JWusername') && document.cookie.includes('JWpassword')) {
+            username = getCookie('JWusername');
+            password = getCookie('JWpassword');
+        }
+
+        var requestOptions = {
+          method: 'GET',
+          redirect: 'follow'
+        };
+        
+        fetch("https://jw1448.brighton.domains/jwTrainingAPI/login?username="+username+"&password="+password, requestOptions)
+          .then(response => response.json())
+          .then(result => {
+              if(result.job_title == "unassigned"){
+                  document.querySelector('#nullJobTitleMessage').style.display = "block";
+              }
+          })
+          .catch(error => console.log('error', error));
+        
+    }
 })
