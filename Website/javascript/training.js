@@ -26,13 +26,13 @@ addEventListener('load', (event) => {
 
                 for (let i = 0; i < firstHalf.length; i++) {
                     let container = document.querySelector('#training_column1');
-                    let card = createCard(firstHalf[i].articleId, firstHalf[i].title, firstHalf[i].description);
+                    let card = createCard(firstHalf[i].articleId, firstHalf[i].title, firstHalf[i].description, firstHalf[i].due_date);
                     container.appendChild(card);
                 }
                 
                 for (let i = 0; i < secondHalf.length; i++) {
                     let container = document.querySelector('#training_column2');
-                    let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description);
+                    let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, firstHalf[i].due_date);
                     container.appendChild(card);
                 }
             })
@@ -51,7 +51,7 @@ addEventListener('load', (event) => {
     //test to set the progress to 50%
     setProgress(50);
 
-    function createCard(articleId, title, description) {
+    function createCard(articleId, title, description, due_date) {
         let card = document.createElement('div');
         card.classList.add('card');
         
@@ -64,6 +64,15 @@ addEventListener('load', (event) => {
         titleLink.textContent = title;
         cardTitle.appendChild(titleLink);
         
+        let cardDueDate = document.createElement('p');
+        cardDueDate.classList.add('due-date');
+        const dueDateObj = new Date(due_date);
+        const month = dueDateObj.toLocaleString('default', { month: 'long' });
+        const day = dueDateObj.getDate();
+        const year = dueDateObj.getFullYear();
+        cardDueDate.textContent = `Due date: ${month} ${day}, ${year}`;
+        cardTitle.appendChild(cardDueDate);
+        
         let cardDescription = document.createElement('p');
         cardDescription.textContent = description;
         
@@ -73,5 +82,6 @@ addEventListener('load', (event) => {
         
         return card;
     }
+
 
 })
