@@ -8,7 +8,7 @@ addEventListener('load', (event) => {
             x.className = "topnav";
         }
     }
-
+    
     setCookie = (cname, cvalue, exdays) => {
         const d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -30,6 +30,22 @@ addEventListener('load', (event) => {
         }
         return "";
     }
+    
+    const logoutButton = document.querySelector('.dropdown-content a.logout');
+    
+    logoutButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if(getCookie('JWusername') != "" && getCookie('JWusername') != null){
+            document.cookie = 'JWusername=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
+            document.cookie = 'JWpassword=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
+        } else {
+            sessionStorage.removeItem('JWusername');
+            sessionStorage.removeItem('JWpassword');
+        }
+
+        window.location.replace("https://jw1448.brighton.domains/jwTraining/login.html");
+    });
 
     if (sessionStorage.getItem("JWusername") != "" && sessionStorage.getItem("JWusername") != null){
         document.querySelector('#profile-card-username').textContent = sessionStorage.getItem("JWusername");
@@ -67,4 +83,5 @@ addEventListener('load', (event) => {
           .catch(error => console.log('error', error));
         
     }
+    
 })
