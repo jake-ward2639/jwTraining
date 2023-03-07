@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require("fs");
 const ejs = require("ejs");
+const nodemailer = require('nodemailer');
 const db = require('./db');
 
 const app = express();
@@ -13,6 +14,16 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.set('view engine', 'ejs');
 
 const port = 3000;
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: 'jwtraininghelp@gmail.com',
+        pass: 'rqdyctyxrrtfmecy'
+    }
+});
 
 app.get('/jwTrainingAPI/article', async (req, res) => {
     const articleId = req.query.articleId;
@@ -149,6 +160,22 @@ async function postUser(req) {
                     let result = await db.query(sql, [email, username, password]);
         
                     if(result.affectedRows) {
+                        
+                        const mailOptions = {
+                            from: 'jwtraininghelp@gmail.com',
+                            to: email,
+                            subject: 'JWtraining: Confirmation of Sign-up',
+                            text: 'Dear '+username+',\n\nThank you for signing up for JWtraining. We are excited to have you onboard and look forward to providing you with valuable training to help you grow your skills and knowledge.\n\nAs a new user, please note that your account will be reviewed by one of our admins to assign you the appropriate job title and training courses before you can access the platform. This process typically takes [X] business days.\n\nOnce your account has been approved and set up, you will receive an email with login instructions, so please keep an eye on your inbox.\n\nIf you have any questions or require any extra help during this process, please feel free to reply to this email, and we will be more than happy to assist you.\n\nThank you again for choosing JWtraining. We look forward to supporting your growth and development.\n\nBest regards,\n'+username+'\nJWtraining Team.'
+                        };
+                    
+                        transporter.sendMail(mailOptions, function(error, info) {
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log('Email sent: ' + info.response);
+                            }
+                        });
+                        
                         status = 201;
                         data = {'id': result.insertId };
                     }
