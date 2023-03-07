@@ -13,7 +13,7 @@
 </div>
 
 <div class="row">
-  <div class="column small" style="background-color:#ccc;">Column</div>
+  <div class="column small" style="background-color:#ccc;"></div>
   <div class="column medium" style="background-color:#bbb;">
     <div class="tab-row">
         <div id="login-tab" class="column medium tab selected" onclick="document.querySelector('#signup-container').style.display = 'none';document.querySelector('#login-container').style.display = 'block'; document.querySelector('#login-tab').classList.add('selected'); document.querySelector('#signup-tab').classList.remove('selected');">Login</div>
@@ -78,12 +78,17 @@
         </div>
     </form>
   </div>
-  <div class="column small" style="background-color:#ccc;">TEST</div>
+  <div class="column small" style="background-color:#ccc;"></div>
 </div>
 
-<div class="footer">
-  <p>Footer</p>
-</div>
+<footer class="footer">
+  <p>&copy; <span id="copyright-year"></span> JWtraining</p>
+</footer>
+
+<script>
+  const currentYear = new Date().getFullYear();
+  document.getElementById("copyright-year").textContent = currentYear;
+</script>
 
 <script src="javascript/login.js"></script>
 </body>
