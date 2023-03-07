@@ -21,7 +21,7 @@ function onPlayerReady(event) {
 
 function onPlayerStateChange(event) {        
     if(event.data === 0) {            
-        alert('alert');
+        alert('Thank you for watching the training video. Complete the quiz at the bottom of the page to finish this course');
     }
 }
 
