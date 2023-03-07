@@ -35,6 +35,8 @@ addEventListener('load', (event) => {
                     let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, firstHalf[i].due_date);
                     container.appendChild(card);
                 }
+                
+                setProgress(Math.round(parseFloat(result.completed_percentage)));
             })
             .catch(error => console.log('error', error));
 
@@ -47,9 +49,6 @@ addEventListener('load', (event) => {
         progressBar.style.width = `${percent}%`;
         percentageLabel.textContent = `${percent}%`;
     }
-
-    //test to set the progress to 50%
-    setProgress(50);
 
     function createCard(articleId, title, description, due_date) {
         let card = document.createElement('div');
