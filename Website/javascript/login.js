@@ -32,7 +32,42 @@ addEventListener('load', (event) => {
 
     submitSignup = () => {
 
-        if (document.querySelector('#signup-password').value == document.querySelector('#signup-password-repeat').value){
+        const email = document.getElementById("signup-email").value.trim();
+        const username = document.getElementById("signup-username").value.trim();
+        const password = document.getElementById("signup-password").value.trim();
+        const repeatPassword = document.getElementById("signup-password-repeat").value.trim();
+        
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        const usernameRegex = /^[a-zA-Z0-9_.-]+$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,31}$/;
+        const validEmail = emailRegex.test(email);
+        const validUsername = usernameRegex.test(username);
+        const validLength = username.length > 5 && username.length < 32 && password.length > 5 && password.length < 32;
+        const validPasswordsRepeat = password === repeatPassword;
+        const validPasswords = passwordRegex.test(password);
+        
+        const alertElement = document.getElementById("signup-alert");
+        const alertContent = document.getElementById("signup-alert-content");
+        
+        if (email === "" || username === "" || password === "" || repeatPassword === "") {
+            alertContent.textContent = "Please fill in all fields.";
+            alertElement.style.display = "block";
+        } else if (!validEmail) {
+            alertContent.textContent = "Invalid email.";
+            alertElement.style.display = "block";
+        } else if (!validUsername) {
+            alertContent.textContent = "Invalid username. Username can only contain letters, numbers, dots, underscores, and hyphens.";
+            alertElement.style.display = "block";
+        } else if (!validLength) {
+            alertContent.textContent = "Username and password must be between 6 and 31 characters long.";
+            alertElement.style.display = "block";
+        } else if (!validPasswordsRepeat) {
+            alertContent.textContent = "Passwords do not match.";
+            alertElement.style.display = "block";
+        } else if (!validPasswords) {
+            alertContent.textContent = "Passwords must be between 6 and 31 characters long, and must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*()_+).";
+            alertElement.style.display = "block";
+        } else {
 
             let submitSignupHeaders = new Headers();
             submitSignupHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -62,20 +97,15 @@ addEventListener('load', (event) => {
                     window.location.replace("https://jw1448.brighton.domains/jwTraining");
                 } else if (response.status == 400){
                     response.json().then(res => {
-                        document.querySelector('#signup-alert-content').textContent = res.error;
-                        document.querySelector('#signup-alert').style.display = "block";
+                        alertContent.textContent = res.error;
+                        alertElement.style.display = "block";
                     }).catch(error);
                 }
                 return response.json();
             })
             .then(result => {})
             .catch(error => {});
-
-        } else {
-            document.querySelector('#signup-alert-content').textContent = 'Input passwords do not match';
-            document.querySelector('#signup-alert').style.display = "block";
         }
-
     }
     
     function setCookie(cname, cvalue, exdays) {
