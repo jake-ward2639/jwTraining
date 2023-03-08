@@ -261,6 +261,9 @@ async function getTrainingSearchResults(req) {
         const username = req.query.username;
         const password = req.query.password;
         let keyword = req.query.keyword;
+        let page = req.query.page ? parseInt(req.query.page) : 1;
+        let pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 10;
+
         if(!keyword){
             keyword = ""
         }
@@ -276,18 +279,28 @@ async function getTrainingSearchResults(req) {
 
             if(result && result.length > 0){
                 
-                let sql = 'SELECT articleId, title, tags, description FROM articles WHERE title LIKE ? OR description LIKE ? OR tags LIKE ?;';
-                let result = await db.query(sql, [`%${keyword}%`, `%${keyword}%`, `%${keyword}%`]);
-    
-                if(result && result.length > 0){
-                    
-                    status = 200;
-                    data = {
-                        result
-                    };
-                    
-                } else {
-                    status = 204;
+                if(page && pageSize){
+                    let offset = (page - 1) * pageSize;
+                    let sql = 'SELECT articleId, title, tags, description FROM articles WHERE title LIKE ? OR description LIKE ? OR tags LIKE ? LIMIT ? OFFSET ?;';
+                    let result = await db.query(sql, [`%${keyword}%`, `%${keyword}%`, `%${keyword}%`, pageSize, offset]);
+        
+                    if(result && result.length > 0){
+                        
+                        let sql = 'SELECT articleId, title, tags, description FROM articles WHERE title LIKE ? OR description LIKE ? OR tags LIKE ?;';
+                        let resultNoOffset = await db.query(sql, [`%${keyword}%`, `%${keyword}%`, `%${keyword}%`]);
+
+                        status = 200;
+                        data = {
+                            result,
+                            overallTotal: resultNoOffset.length,
+                            currentPage: page,
+                            pageSize: pageSize
+                        };
+                        
+                    } else {
+                        status = 204;
+                    }
+
                 }
                 
             } else {
