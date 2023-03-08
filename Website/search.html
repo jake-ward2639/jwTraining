@@ -29,9 +29,9 @@
 </div>
 
 <div class="topnav" id="topNav">
-  <a href="https://jw1448.brighton.domains/jwTraining" class="active">DashBoard</a>
+  <a href="https://jw1448.brighton.domains/jwTraining/search.html" class="active">All Articles</a>
+  <a href="https://jw1448.brighton.domains/jwTraining">DashBoard</a>
   <a href="https://jw1448.brighton.domains/jwTraining/training.html">Training</a>
-  <a href="https://jw1448.brighton.domains/jwTraining/search.html">All Articles</a>
   <a href="https://jw1448.brighton.domains/jwTraining/contacts.html">Contacts</a>
   <a href="javascript:void(0);" class="icon" onclick="mobFriNav()">
     <i class="fa fa-bars"></i>
@@ -41,32 +41,20 @@
 <div class="row">
   <div class="column small" style="background-color:#ccc;"></div>
   <div class="column medium noPadding" style="background-color:#bbb;">
-      <div id="nullJobTitleMessage" class="column medium" style="background-color:#bbb;">
-        <div class="card">
-            <div class="container">
-                <h4>Thanks for making your account!</h4> 
-                <p>Thank you for making your account, please be patient as an administrator will soon autheticate your account and assign your job title.</p> 
-            </div>
+      <div class="row">
+        <div class="search-container">
+            <form id="search-form">
+                <input type="text" id="searchInput" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
         </div>
-    </div>
-  <div class="row">
-  <div class="column medium" style="background-color:#bbb;">
-    <div class="card">
-        <div class="container">
-            <h4>Training 1</h4> 
-            <p>Lorem Ipsum</p> 
+      </div>
+      <div class="row">
+        <div id="training_column1" class="column medium" style="background-color:#bbb;">
         </div>
-    </div>
-  </div>
-  <div class="column medium" style="background-color:#bbb;">
-    <div class="card">
-        <div class="container">
-            <h4>Training 1</h4> 
-            <p>Lorem Ipsum</p> 
+        <div id="training_column2" class="column medium" style="background-color:#bbb;">
         </div>
-    </div>
-  </div>
-  </div>
+      </div>
   </div>
   <div class="column small" style="background-color:#ccc;"></div>
 </div>
@@ -76,5 +64,6 @@
 </footer>
 
 <script src="javascript/index.js"></script>
+<script src="javascript/search.js"></script>
 </body>
 </html>

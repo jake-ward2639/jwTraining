@@ -32,7 +32,7 @@ addEventListener('load', (event) => {
                 
                 for (let i = 0; i < secondHalf.length; i++) {
                     let container = document.querySelector('#training_column2');
-                    let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, firstHalf[i].due_date);
+                    let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, secondHalf[i].due_date);
                     container.appendChild(card);
                 }
                 
