@@ -87,6 +87,13 @@ app.get('/jwTrainingAPI/training', async (req, res) => {
     else res.end();       
 })
 
+app.get('/jwTrainingAPI/training/search', async (req, res) => {
+    const {status, data} = await getTrainingSearchResults(req);
+    res.status(status);
+    if(data) res.json(data);
+    else res.end();
+})
+
 app.post('/jwTrainingAPI/assign_role', async (req, res) => {
     const {status, data} = await postRole(req);
     res.status(status);
@@ -144,8 +151,9 @@ async function postUser(req) {
         && email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
         && email.length > 0 && email.length <= 64 
         && username.match(/^[a-zA-Z0-9_.-]+$/)
-        && username.length > 0 && username.length <= 64
-        && password.length > 0 && password.length <= 64){
+        && username.length > 5 && username.length <= 32
+        && password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,31}$/)
+        && password.length > 5 && password.length <= 32){
 
             let sql = 'SELECT `userId` FROM `users` WHERE `email`=?';
             let result = await db.query(sql, [email]);
@@ -228,6 +236,54 @@ async function getTraining(req) {
                     data = {
                         result,
                         'completed_percentage': completed_percentage[0].completed_percentage
+                    };
+                    
+                } else {
+                    status = 204;
+                }
+                
+            } else {
+                status = 401;
+            }
+            
+        } else {
+            status = 400;   
+        }
+    } catch(e) {
+        console.error(e);
+    }
+    return {status, data};
+}
+
+async function getTrainingSearchResults(req) {
+    let status = 500, data = null;
+    try {
+        const username = req.query.username;
+        const password = req.query.password;
+        let keyword = req.query.keyword;
+        if(!keyword){
+            keyword = ""
+        }
+        if(username && password
+        && keyword.length <= 100
+        && username.length > 0 && username.length <= 32
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
+        && password.length > 0 && password.length <= 32){
+
+            let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
+            let result = await db.query(sql, [username, password]);
+            let userId = result[0].userId;
+
+            if(result && result.length > 0){
+                
+                let sql = 'SELECT articleId, title, tags, description FROM articles WHERE title LIKE ? OR description LIKE ? OR tags LIKE ?;';
+                let result = await db.query(sql, [`%${keyword}%`, `%${keyword}%`, `%${keyword}%`]);
+    
+                if(result && result.length > 0){
+                    
+                    status = 200;
+                    data = {
+                        result
                     };
                     
                 } else {
