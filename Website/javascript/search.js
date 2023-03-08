@@ -1,13 +1,14 @@
 addEventListener('load', (event) => {
 
-    fetchData();
+    fetchData("");
     
     document.querySelector('#search-form').addEventListener('submit', function(event) {
         event.preventDefault();
-        fetchData();
+        const keyword = document.getElementById("searchInput").value.trim();
+        fetchData(keyword);
     });
 
-function fetchData(page = 1, pageSize = 10) {
+function fetchData(keyword, page = 1, pageSize = 10) {
     let username, password;
 
     if (sessionStorage.getItem('JWusername') && sessionStorage.getItem('JWpassword')) {
@@ -19,7 +20,6 @@ function fetchData(page = 1, pageSize = 10) {
     }
 
     if (username && password) {
-        const keyword = document.getElementById("searchInput").value.trim();
         fetch(`https://jw1448.brighton.domains/jwTrainingAPI/training/search?username=${username}&password=${password}&keyword=${keyword}&page=${page}&pageSize=${pageSize}`)
         .then(response => response.json())
         .then(result => {
@@ -55,7 +55,7 @@ function fetchData(page = 1, pageSize = 10) {
                 } else {
                     paginationLink.addEventListener('click', function(event) {
                         event.preventDefault();
-                        fetchData(i, pageSize);
+                        fetchData(keyword, i, pageSize);
                     });
                 }
                 paginationContainer.appendChild(paginationLink);
