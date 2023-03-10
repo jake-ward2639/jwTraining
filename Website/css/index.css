@@ -142,6 +142,11 @@
   .container {
       padding: 2px 16px;
   }
+
+  #logo {
+    width:72px;
+    height:72px;
+  }
   
   #nullJobTitleMessage {
       display: none;
@@ -277,6 +282,11 @@
     
     .column.small {
         display: none;
+    }
+
+    #logo {
+        width:42px;
+        height:42px;
     }
     
     #training_column1 {
