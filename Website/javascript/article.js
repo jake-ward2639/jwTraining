@@ -75,8 +75,14 @@ addEventListener('load', (event) => {
             };
         
             fetch("https://jw1448.brighton.domains/jwTrainingAPI/article/submit", requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
+            .then(response => {
+                if(response.status == 200) {
+                    alert('Training article successful complete.');
+                    window.location.href = "https://jw1448.brighton.domains/jwTraining/training.html";
+                }
+                return response.text;
+            })
+            .then(result => {})
             .catch(error => console.log('error', error));
 
         } else {
