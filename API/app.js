@@ -94,6 +94,13 @@ app.get('/jwTrainingAPI/training/search', async (req, res) => {
     else res.end();
 })
 
+app.get('/jwTrainingAPI/stats', async (req, res) => {
+    const {status, data} = await getUserStats(req);
+    res.status(status);
+    if(data) res.json(data);
+    else res.end();
+})
+
 app.post('/jwTrainingAPI/assign_role', async (req, res) => {
     const {status, data} = await postRole(req);
     res.status(status);
@@ -292,9 +299,9 @@ async function getTrainingSearchResults(req) {
                         status = 200;
                         data = {
                             result,
-                            overallTotal: resultNoOffset.length,
-                            currentPage: page,
-                            pageSize: pageSize
+                            'overallTotal': resultNoOffset.length,
+                            'currentPage': page,
+                            'pageSize': pageSize
                         };
                         
                     } else {
@@ -302,6 +309,55 @@ async function getTrainingSearchResults(req) {
                     }
 
                 }
+                
+            } else {
+                status = 401;
+            }
+            
+        } else {
+            status = 400;   
+        }
+    } catch(e) {
+        console.error(e);
+    }
+    return {status, data};
+}
+
+async function getUserStats(req) {
+    let status = 500, data = null;
+    try {
+        const username = req.query.username;
+        const password = req.query.password;
+        if(username && password
+        && username.length > 0 && username.length <= 32
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
+        && password.length > 0 && password.length <= 32){
+
+            let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
+            let result = await db.query(sql, [username, password]);
+            let userId = result[0].userId;
+
+            if(result && result.length > 0){
+                
+                let sql = 'SELECT COUNT(*) AS completed_articles FROM assigned_articles WHERE userId = ? AND completed = true';
+                let completedArticles = await db.query(sql, [userId]);
+
+                sql = 'SELECT COUNT(*) AS missed_articles FROM assigned_articles WHERE userId = ? AND completed = false AND due_date < NOW()';
+                let missedArticles = await db.query(sql, [userId]);
+
+                sql = 'SELECT COUNT(*) AS uncompleted_articles FROM assigned_articles WHERE userId = ? AND completed = false';
+                let uncompletedArticles = await db.query(sql, [userId]);
+
+                sql = 'SELECT a.articleId, a.title, a.description, aa.due_date FROM assigned_articles aa JOIN articles a ON a.articleId = aa.articleId WHERE aa.userId = ? AND aa.completed = false ORDER BY aa.due_date ASC LIMIT 1';
+                let closestArticle = await db.query(sql, [userId]);
+                    
+                status = 200;
+                data = {
+                    'completedArticles': completedArticles[0].completed_articles,
+                    'missedArticles': missedArticles[0].missed_articles,
+                    'uncompletedArticles': uncompletedArticles[0].uncompleted_articles,
+                    closestArticle
+                };
                 
             } else {
                 status = 401;
