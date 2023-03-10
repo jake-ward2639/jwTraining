@@ -1,87 +1,83 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Dynamic Page</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/css/index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/css/article.css">
-    <link rel="icon" href="https://jw1448.brighton.domains/jwTraining/assets/jwTraining.ico">
-  </head>
-  <body>
-    <div class="header">
-    <div class="row">
-        <div class="column medium"></div>
-        <div class="column medium">
-          <img id="logo" src="https://jw1448.brighton.domains/jwTraining/assets/jwTraining_icon.png" alt="jwTraining_icon">
-          <h2 style="margin-top: 0;">jwTraining</h2>
-        </div>
-        <div class="column medium">
-            <div class="card profile">
-                <div class="dropdown">
-                    <button class="dropbtn"><i class="fa fa-user-o" aria-hidden="true"></i> <span id="profile-card-username">Username</span></button>
-                    <div class="dropdown-content">
-                        <a href="#"><i class="fa fa-user"></i> Profile</a>
-                        <a href="#" class="logout"><i class="fa fa-sign-out"></i> Logout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
-<div class="topnav" id="topNav">
-  <a href="https://jw1448.brighton.domains/jwTraining" class="active">DashBoard</a>
-  <a href="https://jw1448.brighton.domains/jwTraining/training.html">Training</a>
-  <a href="https://jw1448.brighton.domains/jwTraining/search.html">All Articles</a>
-  <a href="https://jw1448.brighton.domains/jwTraining/contacts.html">Contacts</a>
-  <a href="javascript:void(0);" class="icon" onclick="mobFriNav()">
-    <i class="fa fa-bars"></i>
-  </a>
-</div>
-
-<div class="row">
-  <div class="column small" style="background-color:#ccc;"></div>
-  <div class="column medium" style="background-color:#bbb;">
-    <div class="card">
-        <div class="container">
-            <h4><%= title %></h4> 
-            <div id="player-container">
-                <div id="videoId" style="display: none;"><%= video_link %></div>
-                <div id="player"></div>
-            </div>
-            <p><%- main_content.replace(/\n/g, "<br>") %></p> 
-            <div class="quiz">
-              <form id="quiz-form">
-                <% quiz_content.forEach(function(question, index){ %>
-                  <div class="question">
-                    <p><%= index+1 %>. <%= question.question %></p>
-                    <% question.answers.forEach(function(answer, answerIndex){ %>
-                      <input type="radio" id="q<%= index+1 %>-a<%= answerIndex+1 %>" name="q<%= index+1 %>" value="<%= answerIndex %>" required>
-                      <label for="q<%= index+1 %>-a<%= answerIndex+1 %>"><%= answer %></label>
-                    <% }) %>
-                  </div>
-                <% }) %>
-                <input type="submit" value="Submit">
-              </form>
-              <div id="quiz-result"></div>
-            </div>
-        </div>
-    </div>
-  </div>
-  <div class="column small" style="background-color:#ccc;"></div>
-</div>
-
-<footer class="footer">
-  <p>&copy; <span id="copyright-year"></span> JWtraining</p>
-</footer>
-
-<script>
-  window.quizContent = <%- JSON.stringify(quiz_content) %>;
-  window.articleId = <%= articleId %>;
-</script>
-<script src="https://jw1448.brighton.domains/jwTraining/javascript/index.js"></script>
-<script src="https://www.youtube.com/player_api"></script>
-<script src="https://jw1448.brighton.domains/jwTraining/javascript/article.js"></script>
-</body>
+	<head>
+		<title>Dynamic Page</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/css/index.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://jw1448.brighton.domains/jwTraining/css/article.css">
+		<link rel="icon" href="https://jw1448.brighton.domains/jwTraining/assets/jwTraining.ico">
+	</head>
+	<body>
+		<div class="header">
+			<div class="row">
+				<div class="column medium"></div>
+				<div class="column medium">
+					<img id="logo" src="https://jw1448.brighton.domains/jwTraining/assets/jwTraining_icon.png" alt="jwTraining_icon">
+					<h2 style="margin-top: 0;">jwTraining</h2>
+				</div>
+				<div class="column medium">
+					<div class="card profile">
+						<div class="dropdown">
+							<button class="dropbtn">
+								<i class="fa fa-user-o" aria-hidden="true"></i>
+								<span id="profile-card-username">Username</span>
+							</button>
+							<div class="dropdown-content">
+								<a href="#">
+									<i class="fa fa-user"></i> Profile </a>
+								<a href="#" class="logout">
+									<i class="fa fa-sign-out"></i> Logout </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="topnav" id="topNav">
+			<a href="https://jw1448.brighton.domains/jwTraining" class="active">DashBoard</a>
+			<a href="https://jw1448.brighton.domains/jwTraining/training.html">Training</a>
+			<a href="https://jw1448.brighton.domains/jwTraining/search.html">All Articles</a>
+			<a href="https://jw1448.brighton.domains/jwTraining/contacts.html">Contacts</a>
+			<a href="javascript:void(0);" class="icon" onclick="mobFriNav()">
+				<i class="fa fa-bars"></i>
+			</a>
+		</div>
+		<div class="row">
+			<div class="column small" style="background-color:#ccc;"></div>
+			<div class="column medium" style="background-color:#bbb;">
+				<div class="card">
+					<div class="container">
+						<h4><%= title %> </h4>
+						<div id="player-container">
+							<div id="videoId" style="display: none;"><%= video_link %> </div>
+							<div id="player"></div>
+						</div>
+						<p><%- main_content.replace(/\n/g, "
+													
+													<br>") %> </p>
+						<div class="quiz">
+							<form id="quiz-form"><% quiz_content.forEach(function(question, index){ %> <div class="question">
+									<p><%= index+1 %>. <%= question.question %> </p><% question.answers.forEach(function(answer, answerIndex){ %> <input type="radio" id="q<%= index+1 %>-a<%= answerIndex+1 %>" name="q<%= index+1 %>" value="<%= answerIndex %>" required>
+									<label for="q<%= index+1 %>-a<%= answerIndex+1 %>"><%= answer %> </label><% }) %>
+								</div><% }) %> <input type="submit" value="Submit">
+							</form>
+							<div id="quiz-result"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="column small" style="background-color:#ccc;"></div>
+		</div>
+		<footer class="footer">
+			<p>&copy; <span id="copyright-year"></span> JWtraining </p>
+		</footer>
+		<script>
+			window.quizContent = < % -JSON.stringify(quiz_content) % > ;
+			window.articleId = < %= articleId % > ;
+		</script>
+		<script src="https://jw1448.brighton.domains/jwTraining/javascript/index.js"></script>
+		<script src="https://www.youtube.com/player_api"></script>
+		<script src="https://jw1448.brighton.domains/jwTraining/javascript/article.js"></script>
+	</body>
 </html>
