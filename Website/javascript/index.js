@@ -8,18 +8,18 @@ addEventListener('load', (event) => {
             x.className = "topnav";
         }
     }
-    
+
     setCookie = (cname, cvalue, exdays) => {
         const d = new Date();
-        d.setTime(d.getTime() + (exdays*24*60*60*1000));
-        let expires = "expires="+ d.toUTCString();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + d.toUTCString();
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
 
     getCookie = (cname) => {
         let name = cname + "=";
         let spli = document.cookie.split(';');
-        for(var j = 0; j < spli.length; j++) {
+        for (var j = 0; j < spli.length; j++) {
             let char = spli[j];
             while (char.charAt(0) == ' ') {
                 char = char.substring(1);
@@ -30,13 +30,13 @@ addEventListener('load', (event) => {
         }
         return "";
     }
-    
+
     const logoutButton = document.querySelector('.dropdown-content a.logout');
-    
+
     logoutButton.addEventListener('click', function(e) {
         e.preventDefault();
-        
-        if(getCookie('JWusername') != "" && getCookie('JWusername') != null){
+
+        if (getCookie('JWusername') != "" && getCookie('JWusername') != null) {
             document.cookie = 'JWusername=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
             document.cookie = 'JWpassword=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
         } else {
@@ -47,43 +47,42 @@ addEventListener('load', (event) => {
         window.location.replace("https://jw1448.brighton.domains/jwTraining/login.html");
     });
 
-    if (sessionStorage.getItem("JWusername") != "" && sessionStorage.getItem("JWusername") != null){
+    if (sessionStorage.getItem("JWusername") != "" && sessionStorage.getItem("JWusername") != null) {
         document.querySelector('#profile-card-username').textContent = sessionStorage.getItem("JWusername");
-    } else if (getCookie('JWusername') != "" && getCookie('JWusername') != null){
+    } else if (getCookie('JWusername') != "" && getCookie('JWusername') != null) {
         document.querySelector('#profile-card-username').textContent = getCookie('JWusername');
     } else {
         window.location.replace("https://jw1448.brighton.domains/jwTraining/login.html");
     }
 
     if (document.querySelector('#nullJobTitleMessage')) {
-        
+
         let username, password;
 
         if (sessionStorage.getItem('JWusername') && sessionStorage.getItem('JWpassword')) {
             username = sessionStorage.getItem('JWusername');
             password = sessionStorage.getItem('JWpassword');
-        }
-        else if (document.cookie.includes('JWusername') && document.cookie.includes('JWpassword')) {
+        } else if (document.cookie.includes('JWusername') && document.cookie.includes('JWpassword')) {
             username = getCookie('JWusername');
             password = getCookie('JWpassword');
         }
 
         var requestOptions = {
-          method: 'GET',
-          redirect: 'follow'
+            method: 'GET',
+            redirect: 'follow'
         };
-        
-        fetch("https://jw1448.brighton.domains/jwTrainingAPI/login?username="+username+"&password="+password, requestOptions)
-          .then(response => response.json())
-          .then(result => {
-              if(result.job_title == "unassigned"){
-                  document.querySelector('#nullJobTitleMessage').style.display = "block";
-              }
-          })
-          .catch(error => console.log('error', error));
-        
+
+        fetch("https://jw1448.brighton.domains/jwTrainingAPI/login?username=" + username + "&password=" + password, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.job_title == "unassigned") {
+                    document.querySelector('#nullJobTitleMessage').style.display = "block";
+                }
+            })
+            .catch(error => console.log('error', error));
+
     }
-    
+
     const currentYear = new Date().getFullYear();
     document.getElementById("copyright-year").textContent = currentYear;
 

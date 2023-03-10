@@ -4,8 +4,7 @@ addEventListener('load', (event) => {
     if (sessionStorage.getItem('JWusername') && sessionStorage.getItem('JWpassword')) {
         username = sessionStorage.getItem('JWusername');
         password = sessionStorage.getItem('JWpassword');
-    }
-    else if (document.cookie.includes('JWusername') && document.cookie.includes('JWpassword')) {
+    } else if (document.cookie.includes('JWusername') && document.cookie.includes('JWpassword')) {
         username = getCookie('JWusername');
         password = getCookie('JWpassword');
     }
@@ -16,8 +15,8 @@ addEventListener('load', (event) => {
             method: 'GET',
             redirect: 'follow'
         };
-          
-        fetch("https://jw1448.brighton.domains/jwTrainingAPI/training?username="+username+"&password="+password, requestOptions)
+
+        fetch("https://jw1448.brighton.domains/jwTrainingAPI/training?username=" + username + "&password=" + password, requestOptions)
             .then(response => response.json())
             .then(result => {
                 let half = Math.ceil(result.result.length / 2);
@@ -29,13 +28,13 @@ addEventListener('load', (event) => {
                     let card = createCard(firstHalf[i].articleId, firstHalf[i].title, firstHalf[i].description, firstHalf[i].due_date);
                     container.appendChild(card);
                 }
-                
+
                 for (let i = 0; i < secondHalf.length; i++) {
                     let container = document.querySelector('#training_column2');
                     let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, secondHalf[i].due_date);
                     container.appendChild(card);
                 }
-                
+
                 setProgress(Math.round(parseFloat(result.completed_percentage)));
             })
             .catch(error => console.log('error', error));
@@ -53,32 +52,34 @@ addEventListener('load', (event) => {
     function createCard(articleId, title, description, due_date) {
         let card = document.createElement('div');
         card.classList.add('card');
-        
+
         let cardContainer = document.createElement('div');
         cardContainer.classList.add('container');
-        
+
         let cardTitle = document.createElement('h4');
         let titleLink = document.createElement('a');
-        titleLink.href = 'https://jw1448.brighton.domains/jwTrainingAPI/article?articleId='+articleId;
+        titleLink.href = 'https://jw1448.brighton.domains/jwTrainingAPI/article?articleId=' + articleId;
         titleLink.textContent = title;
         cardTitle.appendChild(titleLink);
-        
+
         let cardDueDate = document.createElement('p');
         cardDueDate.classList.add('due-date');
         const dueDateObj = new Date(due_date);
-        const month = dueDateObj.toLocaleString('default', { month: 'long' });
+        const month = dueDateObj.toLocaleString('default', {
+            month: 'long'
+        });
         const day = dueDateObj.getDate();
         const year = dueDateObj.getFullYear();
         cardDueDate.textContent = `Due date: ${month} ${day}, ${year}`;
         cardTitle.appendChild(cardDueDate);
-        
+
         let cardDescription = document.createElement('p');
         cardDescription.textContent = description;
-        
+
         cardContainer.appendChild(cardTitle);
         cardContainer.appendChild(cardDescription);
         card.appendChild(cardContainer);
-        
+
         return card;
     }
 
