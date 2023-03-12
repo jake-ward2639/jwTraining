@@ -20,30 +20,39 @@ addEventListener('load', (event) => {
     fetch(`https://jw1448.brighton.domains/jwTrainingAPI/stats?username=${username}&password=${password}`, requestOptions)
         .then(response => response.json())
         .then(result => {
+
             let closestArticleContainer = document.querySelector("#closest-article-container");
 
-            let cardTitle = document.createElement('h4');
-            let titleLink = document.createElement('a');
-            titleLink.href = 'https://jw1448.brighton.domains/jwTrainingAPI/article?articleId=' + result.closestArticle[0].articleId;
-            titleLink.textContent = result.closestArticle[0].title;
-            cardTitle.appendChild(titleLink);
+            if (result.closestArticle.length > 0) {
 
-            let cardDueDate = document.createElement('p');
-            cardDueDate.classList.add('due-date');
-            const dueDateObj = new Date(result.closestArticle[0].due_date);
-            const month = dueDateObj.toLocaleString('default', {
-                month: 'long'
-            });
-            const day = dueDateObj.getDate();
-            const year = dueDateObj.getFullYear();
-            cardDueDate.textContent = `Due date: ${month} ${day}, ${year}`;
-            cardTitle.appendChild(cardDueDate);
+                let cardTitle = document.createElement('h4');
+                let titleLink = document.createElement('a');
+                titleLink.href = 'https://jw1448.brighton.domains/jwTrainingAPI/article?articleId=' + result.closestArticle[0].articleId;
+                titleLink.textContent = result.closestArticle[0].title;
+                cardTitle.appendChild(titleLink);
 
-            let cardDescription = document.createElement('p');
-            cardDescription.textContent = result.closestArticle[0].description;
+                let cardDueDate = document.createElement('p');
+                cardDueDate.classList.add('due-date');
+                const dueDateObj = new Date(result.closestArticle[0].due_date);
+                const month = dueDateObj.toLocaleString('default', {
+                    month: 'long'
+                });
+                const day = dueDateObj.getDate();
+                const year = dueDateObj.getFullYear();
+                cardDueDate.textContent = `Due date: ${month} ${day}, ${year}`;
+                cardTitle.appendChild(cardDueDate);
 
-            closestArticleContainer.appendChild(cardTitle);
-            closestArticleContainer.appendChild(cardDescription);
+                let cardDescription = document.createElement('p');
+                cardDescription.textContent = result.closestArticle[0].description;
+
+                closestArticleContainer.appendChild(cardTitle);
+                closestArticleContainer.appendChild(cardDescription);
+
+            } else {
+                let noArticleMessage = document.createElement('h4');
+                noArticleMessage.textContent = "There is no work due.";
+                closestArticleContainer.appendChild(noArticleMessage);
+            }
 
             let userStatsContainer = document.querySelector("#user-stats-container");
             let completedArticles = document.createElement('p');
