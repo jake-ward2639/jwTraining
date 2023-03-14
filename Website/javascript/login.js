@@ -1,4 +1,15 @@
 addEventListener('load', (event) => {
+    
+    cancelLogin = () => {
+        const referrer = document.referrer;
+        const jwDomain = window.location.hostname;
+        if (referrer && !referrer.includes(jwDomain)) {
+            window.location.href = referrer;
+        } else {
+            window.history.back();
+        }
+    }
+    
     submitLogin = () => {
 
         let username = document.querySelector('#login-username').value;
