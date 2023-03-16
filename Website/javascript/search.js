@@ -21,48 +21,54 @@ addEventListener('load', (event) => {
 
         if (username && password) {
             fetch(`https://jw1448.brighton.domains/jwTrainingAPI/training/search?username=${username}&password=${password}&keyword=${keyword}&page=${page}&pageSize=${pageSize}`)
-                .then(response => response.json())
-                .then(result => {
-                    let half = Math.ceil(result.result.length / 2);
-                    let firstHalf = result.result.slice(0, half);
-                    let secondHalf = result.result.slice(half);
-                    let container1 = document.querySelector('#training_column1');
-                    let container2 = document.querySelector('#training_column2');
-                    container1.innerHTML = "";
-                    container2.innerHTML = "";
-                    document.querySelector('#pagination').innerHTML = "";
-
-                    for (let i = 0; i < firstHalf.length; i++) {
-                        let card = createCard(firstHalf[i].articleId, firstHalf[i].title, firstHalf[i].description, firstHalf[i].tags);
-                        container1.appendChild(card);
-                    }
-                    for (let i = 0; i < secondHalf.length; i++) {
-                        let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, secondHalf[i].tags);
-                        container2.appendChild(card);
-                    }
-
-                    if (result.overallTotal > pageSize) {
-                        let paginationContainer = document.querySelector('#pagination');
-                        paginationContainer.innerHTML = "";
-                        let numPages = Math.ceil(result.overallTotal / pageSize);
-                        for (let i = 1; i <= numPages; i++) {
-                            let paginationLink = document.createElement('a');
-                            paginationLink.href = '#';
-                            paginationLink.textContent = i;
-                            paginationLink.classList.add('pagination-link');
-                            if (i === page) {
-                                paginationLink.classList.add('active');
-                            } else {
-                                paginationLink.addEventListener('click', function(event) {
-                                    event.preventDefault();
-                                    fetchData(keyword, i, pageSize);
-                                });
+                .then(response => { 
+                    if (response.status === 204) {
+                        alert("Sorry, there are no results.");
+                        return;
+                    } else {
+                        response.json().then(result => {
+                            let half = Math.ceil(result.result.length / 2);
+                            let firstHalf = result.result.slice(0, half);
+                            let secondHalf = result.result.slice(half);
+                            let container1 = document.querySelector('#training_column1');
+                            let container2 = document.querySelector('#training_column2');
+                            container1.innerHTML = "";
+                            container2.innerHTML = "";
+                            document.querySelector('#pagination').innerHTML = "";
+        
+                            for (let i = 0; i < firstHalf.length; i++) {
+                                let card = createCard(firstHalf[i].articleId, firstHalf[i].title, firstHalf[i].description, firstHalf[i].tags);
+                                container1.appendChild(card);
                             }
-                            paginationContainer.appendChild(paginationLink);
-                        }
+                            for (let i = 0; i < secondHalf.length; i++) {
+                                let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, secondHalf[i].tags);
+                                container2.appendChild(card);
+                            }
+        
+                            if (result.overallTotal > pageSize) {
+                                let paginationContainer = document.querySelector('#pagination');
+                                paginationContainer.innerHTML = "";
+                                let numPages = Math.ceil(result.overallTotal / pageSize);
+                                for (let i = 1; i <= numPages; i++) {
+                                    let paginationLink = document.createElement('a');
+                                    paginationLink.href = '#';
+                                    paginationLink.textContent = i;
+                                    paginationLink.classList.add('pagination-link');
+                                    if (i === page) {
+                                        paginationLink.classList.add('active');
+                                    } else {
+                                        paginationLink.addEventListener('click', function(event) {
+                                            event.preventDefault();
+                                            fetchData(keyword, i, pageSize);
+                                        });
+                                    }
+                                    paginationContainer.appendChild(paginationLink);
+                                }
+                            }
+                        })
+                        .catch(error => console.error(error));
                     }
                 })
-                .catch(error => console.error(error));
         }
     }
 
