@@ -17,27 +17,37 @@ addEventListener('load', (event) => {
         };
 
         fetch("https://jw1448.brighton.domains/jwTrainingAPI/training?username=" + username + "&password=" + password, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                let half = Math.ceil(result.result.length / 2);
-                let firstHalf = result.result.slice(0, half);
-                let secondHalf = result.result.slice(half);
-
-                for (let i = 0; i < firstHalf.length; i++) {
-                    let container = document.querySelector('#training_column1');
-                    let card = createCard(firstHalf[i].articleId, firstHalf[i].title, firstHalf[i].description, firstHalf[i].due_date);
-                    container.appendChild(card);
+            .then(response => {
+                if (response.status === 204) {
+                    setProgress(100);
+                    let noArticleMessage = document.createElement('h4');
+                    noArticleMessage.textContent = "There is no work due.";
+                    document.querySelector("#training_column1").appendChild(noArticleMessage);
+                    return;
+                } else if (response.status === 200) {
+                    response.json().then(result => {
+                        let half = Math.ceil(result.result.length / 2);
+                        let firstHalf = result.result.slice(0, half);
+                        let secondHalf = result.result.slice(half);
+        
+                        for (let i = 0; i < firstHalf.length; i++) {
+                            let container = document.querySelector('#training_column1');
+                            let card = createCard(firstHalf[i].articleId, firstHalf[i].title, firstHalf[i].description, firstHalf[i].due_date);
+                            container.appendChild(card);
+                        }
+        
+                        for (let i = 0; i < secondHalf.length; i++) {
+                            let container = document.querySelector('#training_column2');
+                            let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, secondHalf[i].due_date);
+                            container.appendChild(card);
+                        }
+        
+                        setProgress(Math.round(parseFloat(result.completed_percentage)));
+                    })
+                    .catch(error => console.log('error', error));
                 }
-
-                for (let i = 0; i < secondHalf.length; i++) {
-                    let container = document.querySelector('#training_column2');
-                    let card = createCard(secondHalf[i].articleId, secondHalf[i].title, secondHalf[i].description, secondHalf[i].due_date);
-                    container.appendChild(card);
-                }
-
-                setProgress(Math.round(parseFloat(result.completed_percentage)));
             })
-            .catch(error => console.log('error', error));
+            
 
     }
 
