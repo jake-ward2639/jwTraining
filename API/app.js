@@ -9,7 +9,11 @@ const nodemailer = require('nodemailer');
 const db = require('./db');
 
 const app = express();
+app.use(fileUpload({
+    createParentPath: true
+}));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors());
 
 app.set('view engine', 'ejs');
 
@@ -113,6 +117,44 @@ app.post('/jwTrainingAPI/assign_training', async (req, res) => {
     res.status(status);
     if(data) res.json(data);
     else res.end();
+})
+
+app.post('/jwTrainingAPI/profile_picture/upload', async (req, res) => {
+    try {
+        let profilePicture = req.files.profilePicture;
+        if(!req.files) {
+            res.status(400).send({
+                status: false,
+                message: 'No image submitted uploaded'
+            });
+        } else if(profilePicture.name.includes('.jpg') || profilePicture.name.includes('.jpeg') || profilePicture.name.includes('.png')){ 
+            
+            profilePicture.mv('./uploads/profilePictures/' + profilePicture.name);
+
+            res.status(201).send({
+                status: true,
+                message: 'Image has been uploaded',
+                data: {
+                    name: profilePicture.name,
+                    mimetype: profilePicture.mimetype,
+                    size: profilePicture.size
+                }
+            });
+
+        } else {
+            res.status(400).send({
+                status: false,
+                message: 'File submitted was not in the correct format'
+            });
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
+})
+
+app.get('/jwTrainingAPI/profile_picture/download', async (req, res) => {
+    const img = __dirname + "/uploads/profilePictures/" + req.query.imageName;
+    res.sendFile(img);
 })
 
 async function getUser(req) {
