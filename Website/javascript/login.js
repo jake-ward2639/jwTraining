@@ -37,10 +37,10 @@ addEventListener('load', (event) => {
 
     submitSignup = () => {
 
-        const email = document.querySelector("signup-email").value.trim();
-        const username = document.querySelector("signup-username").value.trim();
-        const password = document.querySelector("signup-password").value.trim();
-        const repeatPassword = document.querySelector("signup-password-repeat").value.trim();
+        const email = document.querySelector("#signup-email").value.trim();
+        const username = document.querySelector("#signup-username").value.trim();
+        const password = document.querySelector("#signup-password").value.trim();
+        const repeatPassword = document.querySelector("#signup-password-repeat").value.trim();
 
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         const usernameRegex = /^[a-zA-Z0-9_.-]+$/;
@@ -51,8 +51,8 @@ addEventListener('load', (event) => {
         const validPasswordsRepeat = password === repeatPassword;
         const validPasswords = passwordRegex.test(password);
 
-        const alertElement = document.querySelector("signup-alert");
-        const alertContent = document.querySelector("signup-alert-content");
+        const alertElement = document.querySelector("#signup-alert");
+        const alertContent = document.querySelector("#signup-alert-content");
 
         if (email === "" || username === "" || password === "" || repeatPassword === "") {
             alertContent.textContent = "Please fill in all fields.";
