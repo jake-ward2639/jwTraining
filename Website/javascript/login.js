@@ -70,7 +70,7 @@ addEventListener('load', (event) => {
             alertContent.textContent = "Passwords do not match.";
             alertElement.style.display = "block";
         } else if (!validPasswords) {
-            alertContent.textContent = "Passwords must be between 6 and 31 characters long, and must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*()_+).";
+            alertContent.textContent = "Passwords must be between 6 and 31 characters long, and must contain at least one uppercase letter, one lowercase letter, one number, and one special character. Only (!@#$%^&*()_+). are allowed as special characters.";
             alertElement.style.display = "block";
         } else {
 
