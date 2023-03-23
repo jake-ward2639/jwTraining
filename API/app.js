@@ -122,30 +122,52 @@ app.post('/jwTrainingAPI/assign_training', async (req, res) => {
 app.post('/jwTrainingAPI/profile_picture/upload', async (req, res) => {
     try {
         let profilePicture = req.files.profilePicture;
-        if(!req.files) {
-            res.status(400).send({
-                status: false,
-                message: 'No image submitted uploaded'
-            });
-        } else if(profilePicture.name.includes('.jpg') || profilePicture.name.includes('.jpeg') || profilePicture.name.includes('.png')){ 
+        const username = req.body.username;
+        const password = req.body.password;
+        if(username && password
+        && username.length > 0 && username.length <= 32
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
+        && password.length > 0 && password.length <= 32){
             
-            profilePicture.mv('./uploads/profilePictures/' + profilePicture.name);
+            let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
+            let result = await db.query(sql, [username, password]);
 
-            res.status(201).send({
-                status: true,
-                message: 'Image has been uploaded',
-                data: {
-                    name: profilePicture.name,
-                    mimetype: profilePicture.mimetype,
-                    size: profilePicture.size
+            if(result && result.length > 0){
+            
+                if(!req.files) {
+                    res.status(400).send({
+                        status: false,
+                        message: 'No image submitted uploaded'
+                    });
+                } else if(profilePicture.name.includes('.jpg') || profilePicture.name.includes('.jpeg') || profilePicture.name.includes('.png')){ 
+                    
+                    let newFileName = username + "." + profilePicture.name.slice((profilePicture.name.lastIndexOf(".") - 1 >>> 0) + 2)
+                    
+                    profilePicture.mv('./uploads/profilePictures/' + newFileName);
+        
+                    res.status(201).send({
+                        status: true,
+                        message: 'Image has been uploaded',
+                        data: {
+                            name: newFileName,
+                            mimetype: profilePicture.mimetype,
+                            size: profilePicture.size
+                        }
+                    });
+        
+                } else {
+                    res.status(400).send({
+                        status: false,
+                        message: 'File submitted was not in the correct format'
+                    });
                 }
-            });
-
+            } else {
+                res.status(400);
+                res.end();
+            }
         } else {
-            res.status(400).send({
-                status: false,
-                message: 'File submitted was not in the correct format'
-            });
+            res.status(400);
+            res.end();
         }
     } catch (err) {
         res.status(500).send(err);
@@ -153,8 +175,46 @@ app.post('/jwTrainingAPI/profile_picture/upload', async (req, res) => {
 })
 
 app.get('/jwTrainingAPI/profile_picture/download', async (req, res) => {
-    const img = __dirname + "/uploads/profilePictures/" + req.query.imageName;
-    res.sendFile(img);
+    try{
+        const username = req.query.username;
+        const password = req.query.password;
+        if(username && password
+        && username.length > 0 && username.length <= 32
+        && username.match(/^[a-zA-Z0-9_.-]+$/)
+        && password.length > 0 && password.length <= 32){
+            
+            let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
+            let result = await db.query(sql, [username, password]);
+
+            if(result && result.length > 0){
+                
+                const directory = __dirname + "/uploads/profilePictures/";
+                fs.readdir(directory, (err, files) => {
+                    if (err) {
+                        res.status(500).send(err);
+                    } else {
+                        const matchingFiles = files.filter(file => file.includes(username));
+                        if (matchingFiles.length === 1) {
+                            const img = directory + matchingFiles[0];
+                            const extension = img.substring(img.lastIndexOf('.') + 1);
+                            res.sendFile(img, { headers: {'Content-Type': `image/${extension}`} });
+                        } else {
+                            res.status(404).send(`File not found for user ${username}`);
+                        }
+                    }
+                });
+                
+            } else {
+                res.status(400);
+                res.end();
+            }
+        } else {
+            res.status(400);
+            res.end();
+        }
+    } catch (err) {
+        res.status(500).send(err);
+    }
 })
 
 async function getUser(req) {
