@@ -450,7 +450,7 @@ async function getUserStats(req) {
                 sql = 'SELECT COUNT(*) AS uncompleted_articles FROM assigned_articles WHERE userId = ? AND completed = false';
                 let uncompletedArticles = await db.query(sql, [userId]);
 
-                sql = 'SELECT a.articleId, a.title, a.description, aa.due_date FROM assigned_articles aa JOIN articles a ON a.articleId = aa.articleId WHERE aa.userId = ? AND aa.completed = false ORDER BY aa.due_date ASC LIMIT 1';
+                sql = 'SELECT a.articleId, a.title, a.description, aa.due_date FROM assigned_articles aa JOIN articles a ON a.articleId = aa.articleId WHERE aa.userId = ? AND aa.completed = false AND aa.due_date >= CURDATE() ORDER BY aa.due_date ASC LIMIT 1';
                 let closestArticle = await db.query(sql, [userId]);
                     
                 status = 200;

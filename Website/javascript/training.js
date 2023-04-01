@@ -78,9 +78,17 @@ addEventListener('load', (event) => {
         const month = dueDateObj.toLocaleString('default', {
             month: 'long'
         });
+        
         const day = dueDateObj.getDate();
         const year = dueDateObj.getFullYear();
         cardDueDate.textContent = `Due date: ${month} ${day}, ${year}`;
+        
+        const currentDate = new Date();
+        if (dueDateObj < currentDate) {
+            card.classList.add('overdue');
+            cardDueDate.textContent = cardDueDate.textContent + ' (overdue)';
+        }
+        
         cardTitle.appendChild(cardDueDate);
 
         let cardDescription = document.createElement('p');
