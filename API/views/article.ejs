@@ -61,7 +61,7 @@
 										<p><%= index+1 %>. <%= question.question %></p>
 										<% question.answers.forEach(function(answer, answerIndex){ %>
 											<input type="radio" id="q<%= index+1 %>-a<%= answerIndex+1 %>" name="q<%= index+1 %>" value="<%= answerIndex %>" required>
-											<label for="q<%= index+1 %>-a<%= answerIndex+1 %>"><%= answer %></label>
+											<label for="q<%= index+1 %>-a<%= answerIndex+1 %>"><%= answer %></label><br>
 										<% }) %>
 									</div>
 								<% }) %>
