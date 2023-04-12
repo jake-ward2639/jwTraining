@@ -227,7 +227,7 @@ async function getUser(req) {
         && username.match(/^[a-zA-Z0-9_.-]+$/)
         && password.length > 0 && password.length <= 32){
 
-            const sql = 'SELECT `email`, `username`, job_title FROM `users` WHERE `username`=? AND `password`=?';
+            const sql = 'SELECT `email`, `username`, job_title FROM `users` WHERE BINARY `username`=? AND BINARY `password`=?';
             const result = await db.query(sql, [username, password]);
 
             if(result && result.length > 0){
