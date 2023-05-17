@@ -6,12 +6,18 @@ const credentials = {
     database: 'jw1448_jwTrainingDatabase'
 };
 
+const pool = mysql.createPool(credentials);
+
 async function query(sql, params) {
-    const connection = await mysql.createConnection(credentials);
-    const [results, ] = await connection.execute(sql, params);
-    return results;
+    const connection = await pool.getConnection();
+    try {
+        const [results, ] = await connection.execute(sql, params);
+        return results;
+    } finally {
+        connection.release(); // Release the connection back to the pool
+    }
 }
 
 module.exports = {
     query
-}
+};

@@ -437,9 +437,10 @@ async function getUserStats(req) {
 
             let sql = 'SELECT `userId` FROM `users` WHERE `username`=? AND `password`=?';
             let result = await db.query(sql, [username, password]);
-            let userId = result[0].userId;
 
             if(result && result.length > 0){
+                
+                let userId = result[0].userId;
                 
                 let sql = 'SELECT COUNT(*) AS completed_articles FROM assigned_articles WHERE userId = ? AND completed = true';
                 let completedArticles = await db.query(sql, [userId]);
