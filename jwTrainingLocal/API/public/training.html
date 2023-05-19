@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>jwTraining</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="icon" href="assets/jwTraining.ico">
+	</head>
+	<body>
+		<div class="header">
+			<div class="row">
+				<div class="column medium"></div>
+				<div class="column medium">
+					<img id="logo" src="assets/jwTraining_icon.png" alt="jwTraining_icon">
+					<h2 style="margin-top: 0;">jwTraining</h2>
+				</div>
+				<div class="column medium">
+					<div class="card profile">
+						<div class="dropdown">
+							<button class="dropbtn">
+								<i class="fa fa-user-o" aria-hidden="true"></i>
+								<span id="profile-card-username">Username</span>
+							</button>
+							<div class="dropdown-content">
+								<a href="#">
+									<i class="fa fa-user"></i> Profile </a>
+								<a href="#" class="logout">
+									<i class="fa fa-sign-out"></i> Logout </a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="topnav" id="topNav">
+			<a href="training.html" class="active">Training</a>
+			<a href="index.html">DashBoard</a>
+			<a href="search.html">All Articles</a>
+			<a href="contacts.html">Contacts</a>
+			<a href="javascript:void(0);" class="icon" onclick="mobFriNav()">
+				<i class="fa fa-bars"></i>
+			</a>
+		</div>
+		<div class="row">
+			<div class="column small" style="background-color:#ccc;"></div>
+			<div class="column medium noPadding" style="background-color:#bbb;">
+				<div class="row">
+					<div id="progress-container">
+						<div id="progress-bar">
+							<div class="bar"></div>
+							<div class="percentage">0%</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="training_column1" class="column medium" style="background-color:#bbb;"></div>
+					<div id="training_column2" class="column medium" style="background-color:#bbb;"></div>
+				</div>
+			</div>
+			<div class="column small" style="background-color:#ccc;"></div>
+		</div>
+		<footer class="footer">
+			<p>&copy; <span id="copyright-year"></span> JWtraining </p>
+		</footer>
+		<script src="javascript/index.js"></script>
+		<script src="javascript/training.js"></script>
+	</body>
+</html>
